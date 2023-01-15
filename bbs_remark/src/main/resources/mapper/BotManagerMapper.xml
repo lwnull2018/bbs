@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.remark.dao.BotManagerMapper">
+    <resultMap id="BaseResultMap" type="com.bbs.remark.pojo.BotManager">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="token" jdbcType="VARCHAR" property="token"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="create_user_id" jdbcType="INTEGER" property="createUserId"/>
+        <result column="update_user_id" jdbcType="INTEGER" property="updateUserId"/>
+        <result column="create_date" jdbcType="VARCHAR" property="createDate"/>
+        <result column="update_date" jdbcType="VARCHAR" property="updateDate"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, token, username, remarks, create_user_id, update_user_id, status, update_date, create_date
+    </sql>
+
+    <insert id="insert" parameterType="com.bbs.remark.pojo.BotManager">
+        insert into bot_manager (id, token, username, remarks, create_user_id, status, create_date)
+        values (
+          #{id}, #{token,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR},
+                #{createUserId,jdbcType=INTEGER},#{status,jdbcType=INTEGER}, #{createDate,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="updateById">
+        update bot_manager
+        set token = #{token}, username = #{username}, remarks = #{remarks}, status = #{status}, update_date = #{updateDate}, update_user_id = #{updateUserId}
+        where id = #{id}
+    </update>
+
+    <select id="getList" resultMap="BaseResultMap">
+        SELECT *
+        FROM bot_manager
+        <where>
+            <if test="username != null and username != '' ">
+                and username  LIKE '%' #{username} '%'
+            </if>
+        </where>
+        order by create_date desc
+    </select>
+
+    <select id="avaiableList" resultMap="BaseResultMap">
+        SELECT *
+        FROM bot_manager
+        WHERE status = 1
+        order by create_date desc
+    </select>
+
+    <select id="getById" resultMap="BaseResultMap">
+        SELECT *
+        FROM bot_manager where id = #{id}
+    </select>
+
+    <delete id="del" parameterType="java.lang.Integer">
+        delete from bot_manager where id = #{id}
+    </delete>
+
+</mapper>

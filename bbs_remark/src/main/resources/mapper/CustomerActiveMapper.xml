@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.remark.dao.CustomerActiveMapper">
+    <resultMap id="BaseResultMap" type="com.bbs.remark.pojo.CustomerActive">
+        <id column="oId" jdbcType="VARCHAR" property="oId"/>
+        <id column="cust_id" jdbcType="INTEGER" property="custId"/>
+        <result column="first_name" jdbcType="VARCHAR" property="firstName"/>
+        <result column="last_name" jdbcType="VARCHAR" property="lastName"/>
+        <result column="full_name" jdbcType="VARCHAR" property="fullName"/>
+        <result column="active_name" jdbcType="VARCHAR" property="activeName"/>
+        <result column="active_type" jdbcType="VARCHAR" property="activeType"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="cur_day" jdbcType="INTEGER" property="curDay"/>
+        <result column="cur_use_second" jdbcType="INTEGER" property="curUseSecond"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        oId, cust_id, first_name, last_name, full_name, active_name, active_type, status, cur_day, cur_use_second, create_date, update_date
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_active
+        where oId = #{oId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert" parameterType="com.bbs.remark.pojo.CustomerActive">
+        insert into customer_active (oId, cust_id, first_name, last_name, full_name, active_name, active_type, status, cur_day, create_date)
+        values (
+          #{oId,jdbcType=VARCHAR}, #{custId,jdbcType=VARCHAR}, #{firstName,jdbcType=VARCHAR}, #{lastName,jdbcType=VARCHAR}, #{fullName,jdbcType=VARCHAR},
+          #{activeName,jdbcType=VARCHAR}, #{activeType,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{curDay,jdbcType=INTEGER},
+          #{createDate,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.bbs.remark.pojo.CustomerActive">
+        update customer_active
+        set
+            update_date = #{updateDate,jdbcType=TIMESTAMP},
+            status = #{status,jdbcType=INTEGER},
+            cur_use_second = #{curUseSecond,jdbcType=INTEGER}
+        where oId = #{oId,jdbcType=VARCHAR}
+    </update>
+
+    <select id="count" parameterType="com.bbs.remark.pojo.CustomerActive" resultType="java.lang.Integer">
+        select count(1) from customer_active
+        <where>
+            <if test="oId != null">
+                and oId = #{oId,jdbcType=VARCHAR}
+            </if>
+            <if test="custId != null">
+                and cust_id = #{custId,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="curDay != null">
+                and cur_day = #{curDay,jdbcType=INTEGER}
+            </if>
+            <if test="activeType != null">
+                and active_type = #{activeType,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryList" parameterType="com.bbs.remark.pojo.CustomerActive" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_active
+        <where>
+            <if test="oId != null">
+                and oId = #{oId,jdbcType=VARCHAR}
+            </if>
+            <if test="custId != null">
+                and cust_id = #{custId,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="curDay != null">
+                and cur_day = #{curDay,jdbcType=INTEGER}
+            </if>
+            <if test="activeType != null">
+                and active_type = #{activeType,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by create_date desc, oId desc
+    </select>
+
+    <select id="findOne" parameterType="com.bbs.remark.pojo.CustomerActive" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_active
+        <where>
+            <if test="oId != null">
+                and oId = #{oId,jdbcType=VARCHAR}
+            </if>
+            <if test="custId != null">
+                and cust_id = #{custId,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="curDay != null">
+                and cur_day = #{curDay,jdbcType=INTEGER}
+            </if>
+            <if test="activeType != null">
+                and active_type = #{activeType,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by create_date desc, oId desc limit 1
+    </select>
+
+    <select id="findActiveOne" parameterType="com.bbs.remark.pojo.CustomerActive" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_active
+        <where>
+            <if test="oId != null">
+                and oId = #{oId,jdbcType=VARCHAR}
+            </if>
+            <if test="custId != null">
+                and cust_id = #{custId,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="curDay != null">
+                and cur_day = #{curDay,jdbcType=INTEGER}
+            </if>
+                and active_type != 'START_WORK' and active_type != 'OFF_WORK'
+        </where>
+        order by create_date desc, oId desc limit 1
+    </select>
+
+    <select id="findActiveWork" parameterType="com.bbs.remark.pojo.CustomerActive" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from customer_active
+        <where>
+            <if test="oId != null">
+                and oId = #{oId,jdbcType=VARCHAR}
+            </if>
+            <if test="custId != null">
+                and cust_id = #{custId,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="curDay != null">
+                and cur_day = #{curDay,jdbcType=INTEGER}
+            </if>
+                and active_type = 'START_WORK'
+        </where>
+        order by create_date desc, oId desc limit 1
+    </select>
+
+    <select id="statAllTimesPerDay" parameterType="com.bbs.remark.pojo.CustomerActive" resultType="java.lang.Long">
+        select sum(cur_use_second)
+        from customer_active
+        <where>
+            <if test="custId != null">
+                and cust_id = #{custId,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="curDay != null">
+                and cur_day = #{curDay,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

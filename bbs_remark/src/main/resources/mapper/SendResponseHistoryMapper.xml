@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.remark.dao.SendResponseHistoryMapper">
+    <resultMap id="BaseResultMap" type="com.bbs.remark.pojo.SendResponseHistory">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="chat_id" jdbcType="INTEGER" property="chatId"/>
+        <result column="from_user_name" jdbcType="VARCHAR" property="fromUserName"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="message_template_id" jdbcType="INTEGER" property="messageTemplateId"/>
+        <result column="response_content" jdbcType="INTEGER" property="responseContent"/>
+        <result column="is_ok" jdbcType="INTEGER" property="isOk"/>
+        <result column="create_date" jdbcType="VARCHAR" property="createDate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, chat_id, from_user_name, user_name, message_template_id, response_content, is_ok, create_date
+    </sql>
+
+    <insert id="insert" parameterType="com.bbs.remark.pojo.MessageTemplate">
+        insert into send_response_history (id, chat_id, from_user_name, user_name,message_template_id, response_content, is_ok, create_date)
+        values (
+          #{id}, #{chatId,jdbcType=INTEGER}, #{fromUserName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{messageTemplateId,jdbcType=INTEGER},
+                #{responseContent,jdbcType=VARCHAR},#{isOk,jdbcType=INTEGER}, #{createDate,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="getList" resultMap="BaseResultMap">
+        SELECT id, chat_id, from_user_name, user_name, message_template_id, is_ok, create_date
+        FROM send_response_history
+        <where>
+            <if test="messageTemplateId != null and messageTemplateId != '' ">
+                and message_template_id =  #{messageTemplateId}
+            </if>
+            <if test="chatId != null and chatId != '' ">
+                and chat_id =  #{chatId}
+            </if>
+            <if test="userName != null and userName != '' ">
+                and user_name  LIKE '%' #{userName} '%'
+            </if>
+        </where>
+        order by create_date desc
+    </select>
+
+    <select id="getById" resultMap="BaseResultMap">
+        SELECT id, chat_id, from_user_name, user_name, message_template_id, response_content, is_ok, create_date
+        FROM send_response_history where id = #{id}
+    </select>
+
+    <delete id="delMessageTemplate" parameterType="java.lang.Integer">
+        delete from send_response_history where id = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbs.remark.dao.MessageTemplateMapper">
+    <resultMap id="BaseResultMap" type="com.bbs.remark.pojo.MessageTemplate">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="begin_chat_id" jdbcType="VARCHAR" property="beginChatId"/>
+        <result column="end_chat_id" jdbcType="VARCHAR" property="endChatId"/>
+        <result column="template_content" jdbcType="VARCHAR" property="templateContent"/>
+        <result column="update_date" jdbcType="VARCHAR" property="updateDate"/>
+        <result column="create_date" jdbcType="VARCHAR" property="createDate"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, begin_chat_id, end_chat_id, template_content, create_date, update_date
+    </sql>
+
+    <insert id="insert" parameterType="com.bbs.remark.pojo.MessageTemplate">
+        insert into message_template (id, begin_chat_id, end_chat_id, template_content, create_date)
+        values (
+          #{id}, #{beginChatId,jdbcType=VARCHAR}, #{endChatId,jdbcType=VARCHAR}, #{templateContent,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="getMessageTemplateList" resultMap="BaseResultMap">
+        SELECT id, begin_chat_id, end_chat_id, template_content, create_date
+        FROM message_template order by create_date desc
+        <!--<where>
+            <if test="startTime != null and startTime != '' ">
+                and create_date &gt;  #{startTime}
+            </if>
+            <if test="endTime != null and endTime != '' ">
+                and create_date &lt;  #{endTime}
+            </if>
+        </where>-->
+    </select>
+
+    <select id="getById" resultMap="BaseResultMap">
+        SELECT id,  begin_chat_id, end_chat_id, template_content, create_date
+        FROM message_template where id = #{id}
+    </select>
+
+    <update id="updateMessageTemplate">
+        update message_template
+        set begin_chat_id = #{beginChatId}, end_chat_id = #{endChatId}, update_date = #{updateDate}, template_content = #{templateContent}
+        where id = #{id}
+    </update>
+
+    <delete id="delMessageTemplate" parameterType="java.lang.Integer">
+        delete from message_template where id = #{id}
+    </delete>
+
+</mapper>

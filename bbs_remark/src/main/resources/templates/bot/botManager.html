@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='附件管理'"></head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!--头-->
+    <div th:replace="fragments/head :: header"></div>
+
+    <div class="layui-body" style="margin: 1%">
+
+        <form id="userSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">机器人名称</label>
+                <div class="layui-input-inline">
+                    <input name="username" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+                <div class="layui-inline">
+                    <!--                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                    <button class="layui-btn"  lay-submit="" lay-filter="searchSubmit">查询</button>
+                </div>
+            </div>
+        </form>
+
+        <hr class="layui-bg-green"/>
+<!--        <hr class="layui-bg-black"/>-->
+
+        <button class="layui-btn layui-btn-normal" onclick="createBot()">新建机器人</button>
+
+        <div style="display:none;" id="currentUser"><shiro:principal property="id"></shiro:principal></div>
+
+        <table id="botList" lay-filter="botTable"></table>
+
+        <script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+    </div>
+
+    <!--添加或编辑文件-->
+    <div id="setBot" class="layer_self_wrap" style="width:700px;display:none;">
+        <form id="botForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <input id="pageNum" type="hidden" name="pageNum"/>
+            <input id="id" type="hidden" name="id"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label">机器人名称</label>
+                <div class="layui-input-inline" style="width:500px;">
+                    <div class="layui-input-inline" style="width: 250px;">
+                        <input id="username" type="text" name="username" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">token</label>
+                <div class="layui-input-inline" style="width:500px;">
+                    <div class="layui-input-inline" style="width: 250px;">
+                        <input id="token" type="text" name="token" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-inline" style="width:500px;">
+                    <div class="layui-input-inline" style="width: 250px;">
+                        <input id="status" type="checkbox" name="status" value="1" lay-skin="switch" lay-text="启用|停用">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-inline" style="width:500px;">
+                    <div class="layui-input-inline" style="width: 250px;">
+                        <textarea id="remarks" name="remarks" placeholder="请输入备注内容" class="layui-textarea" rows="6"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button id="formSubmit" class="layui-btn" lay-submit lay-filter="formSubmit" >提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--底部-->
+    <div th:replace="fragments/footer :: footer"></div>
+    <script src="/js/dateUtils.js"></script>
+    <script src="/js/bot/botManager.js"></script>
+
+    <style>
+        .layui-form-item .layui-input-inline{
+            width: 180px;
+        }
+    </style>
+
+</div>
+</body>
+</html>

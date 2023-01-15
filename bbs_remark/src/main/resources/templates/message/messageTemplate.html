@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='消息模板管理'"></head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!--头-->
+    <div th:replace="fragments/head :: header"></div>
+
+    <div class="layui-body" style="margin: 1%">
+
+        <span>消息模板管理</span>
+
+        <hr class="layui-bg-blue"/>
+<!--        <hr class="layui-bg-black"/>-->
+
+        <button class="layui-btn layui-btn-normal" onclick="createMessageTemplate()">新建消息模板</button>
+
+        <div style="display:none;" id="currentUser"><shiro:principal property="id"></shiro:principal></div>
+
+        <table id="messageTemplateList" lay-filter="messageTemplateTable"></table>
+
+        <script type="text/html" id="optBar">
+            <a class="layui-btn layui-btn-xs" lay-event="send">发送</a>
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+    </div>
+
+    <!--添加或编辑消息模板-->
+    <div id="setMessage" class="layer_self_wrap" style="width:700px;display:none;">
+        <form id="msgForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <input id="pageNum" type="hidden" name="pageNum"/>
+            <input id="id" type="hidden" name="id"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户ID范围</label>
+                <div class="layui-input-inline" style="width:500px;">
+
+                    <div class="layui-input-inline" style="width: 150px;">
+                        <input id="beginChatId" type="text" name="beginChatId" lay-verify="required" autocomplete="off" class="layui-input" th:value="682328822">
+                    </div>
+                    <div class="layui-form-mid">-</div>
+                    <div class="layui-input-inline" style="width: 150px;">
+                        <input id="endChatId" type="text" name="endChatId" lay-verify="required" autocomplete="off" class="layui-input" th:value="682328822">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">发送类型</label>
+                    <div class="layui-input-inline">
+                        <div class="layui-input-inline" style="width: 150px;">
+                            <select id="contentTypeSelect-1" name="contentType" xm-select="contentType" lay-filter="contentTypeSelect-1">
+                                <option value="Text">文本</option>
+                                <option value="Photo">图片</option>
+                                <option value="Voice">语音</option>
+                                <option value="Video">视频</option>
+                            </select>
+                        </div>
+                        <!--<div class="layui-input-inline" style="width: 150px;">
+                            <button id="add" type="button"  class="layui-btn layui-btn-sm">
+                                <i class="layui-icon">新增</i>
+                            </button>
+                        </div>-->
+                    </div>
+                </div>
+                <div id="textContentDiv-1" class="layui-form-item">
+                    <label class="layui-form-label">发送内容</label>
+                    <div class="layui-input-inline">
+                        <textarea id="textContent-1" name="textContent" placeholder="请输入文本内容" class="layui-textarea" rows="6"></textarea>
+                    </div>
+                </div>
+                <div id="fileDiv-1" class="layui-form-item layui-hide">
+                    <label class="layui-form-label">文件</label>
+                    <div class="layui-input-inline">
+                        <select id="fileContent-1" name="fileContent"></select>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">发送类型</label>
+                    <div class="layui-input-inline">
+                        <div class="layui-input-inline">
+                            <select id="contentTypeSelect-2" name="contentType"  xm-select="contentType" lay-filter="contentTypeSelect-2" th:value="Photo">
+                                <option value="Photo">图片</option>
+                                <option value="Text">文本</option>
+                                <option value="Voice">语音</option>
+                                <option value="Video">视频</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="textContentDiv-2" class="layui-form-item layui-hide">
+                    <label class="layui-form-label">发送内容</label>
+                    <div class="layui-input-inline">
+                        <textarea id="textContent-2" name="textContent" placeholder="请输入文本内容" class="layui-textarea" rows="6"></textarea>
+                    </div>
+                </div>
+                <div id="fileDiv-2" class="layui-form-item">
+                    <label class="layui-form-label">文件</label>
+                    <div class="layui-input-inline">
+                        <select id="fileContent-2" name="fileContent"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">发送类型</label>
+                    <div class="layui-input-inline">
+                        <div class="layui-input-inline">
+                            <select id="contentTypeSelect-3" name="contentType"  xm-select="contentType" lay-filter="contentTypeSelect-3" th:value="Voice">
+                                <option value="Voice">语音</option>
+                                <option value="Text">文本</option>
+                                <option value="Photo">图片</option>
+                                <option value="Video">视频</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="textContentDiv-3" class="layui-form-item layui-hide">
+                    <label class="layui-form-label">发送内容</label>
+                    <div class="layui-input-inline">
+                        <textarea id="textContent-3" name="textContent" placeholder="请输入文本内容" class="layui-textarea" rows="8"></textarea>
+                    </div>
+                </div>
+                <div id="fileDiv-3" class="layui-form-item">
+                    <label class="layui-form-label">文件</label>
+                    <div class="layui-input-inline">
+                        <select id="fileContent-3" name="fileContent"></select>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">发送类型</label>
+                    <div class="layui-input-inline">
+                        <div class="layui-input-inline">
+                            <select id="contentTypeSelect-4" name="contentType"  xm-select="contentType" lay-filter="contentTypeSelect-4" th:value="Voice">
+                                <option value="Video">视频</option>
+                                <option value="Text">文本</option>
+                                <option value="Photo">图片</option>
+                                <option value="Voice">语音</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="textContentDiv-4" class="layui-form-item layui-hide">
+                    <label class="layui-form-label">发送内容</label>
+                    <div class="layui-input-inline">
+                        <textarea id="textContent-4" name="textContent" placeholder="请输入文本内容" class="layui-textarea" rows="6"></textarea>
+                    </div>
+                </div>
+                <div id="fileDiv-4" class="layui-form-item">
+                    <label class="layui-form-label">文件</label>
+                    <div class="layui-input-inline">
+                        <select id="fileContent-4" name="fileContent"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button id="formSubmit" class="layui-btn"  lay-submit="" lay-filter="formSubmit">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--发送窗口-->
+    <div id="sendDialog" class="layer_self_wrap" style="width:500px; display:none;">
+        <form id="sendForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <input id="templateId" type="hidden" name="id"/>
+            <div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">机器人</label>
+                    <div class="layui-input-inline">
+                        <div class="layui-input-inline" style="width: 150px;">
+                            <select id="botList" name="botList" xm-select="botList" lay-filter="botList">
+                                <option value="">请选择发送机器人</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button id="sendSubmit" class="layui-btn"  lay-submit="" lay-filter="sendSubmit">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--底部-->
+    <div th:replace="fragments/footer :: footer"></div>
+    <script src="/js/dateUtils.js"></script>
+    <script src="/js/message/messageTemplate.js"></script>
+
+    <style>
+        .layui-form-item .layui-input-inline{
+            width: 320px;
+        }
+    </style>
+
+</div>
+</body>
+</html>

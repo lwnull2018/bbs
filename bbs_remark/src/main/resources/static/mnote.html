@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>留言板</title>
+    <link rel="shortcut icon" href="/images/logo.jpg" type="image/x-icon" />
+    <link rel="stylesheet" href="css/m/common.css"/>
+    <link rel="stylesheet" href="css/m/note_1.css" />
+<!--    <link rel="stylesheet" href="css/m/note.css" />-->
+    <script type="text/javascript">
+        if(/Android|webOS| iPhone | iPad | iPod |BlackBerry|opera mini|opera mobile|appleWebkit.*mobile|mobile/i.test(
+            navigator.userAgent)) {
+            // window.location.href = "/mnote.html";
+            console.log('移动端');
+        } else {
+            console.log('pc端');
+            window.location.href = "/note.html";
+        }
+    </script>
+
+</head>
+<body>
+
+<div class="note">
+  <!-- 留言区 -->
+  <div class="note-editor">
+      <!-- 留言框 -->
+      <textarea class="note-editor-text"
+                placeholder="说点什么吧..."
+                @focus="isEditing = true"
+                @focusout="isEditing = false"
+                v-model="noteNew.content">
+
+                  </textarea>
+      <!-- 提交按钮 -->
+      <button class="note-editor-submit" @click="submitReply">提交</button>
+      <!-- 私密发送 -->
+      <div class="note-editor-secret">
+          <span @click="isSecret = !isSecret,changeSecret()">悄悄话</span>
+          <input type="checkbox" v-model="isSecret" @change="changeSecret"/>
+      </div>
+      <!-- 昵称框 -->
+      <input class="note-editor-nickname"
+             type="input"
+             placeholder="怎么称呼你呢..."
+             v-model="noteNew.nickname"
+             maxlength="12"
+             @focus="isEditing = true"
+             @focusout="isEditing = false"/>
+      <span>{{noteNew.nickname.length}}/12</span>
+      <span v-show="replyInfo.respondent != ''" @click="cancelReply">撤销回复</span>
+      <span v-show="isEditing || replyInfo.respondent != ''">{{replyInfo.respondent == '' ? (isSecret ? '说点悄悄话，仅博主可见...' : '留言中...') : ('正在回复  ' + replyInfo.respondent + '  的留言...')}}</span>
+  </div>
+
+  <!-- 留言列表 -->
+  <div class="note-content">
+
+      <ul class="note-content-list">
+          <!-- 留言项 -->
+          <li v-for="(note,idx) in noteList" class="note-content-list-node">
+              <div class="note-avatar-left">
+                  <img src="/images/note/avatar/avatar_0.png"/>
+              </div>
+              <p>{{note.nickname}}：&nbsp;&nbsp;&nbsp;<span @click="reply(note.id,note.id,note.nickname)"><img src="/images/note/reply.png"/>回复</span>|<span @click="reply(note.id,note.id,note.nickname)"><img src="/images/note/zan.png"/>顶</span></p>
+              <p>{{note.createTime}}</p>
+              <p>{{note.content}}</p>
+
+              <!-- 回复项 -->
+              <ul class="note-content-follow-list">
+                  <li v-for="(follow,idx1) in note.follows" class="note-content-follow-list-node">
+                      <div class="note-reply-avatar-left">
+                          <img src="/images/note/avatar/avatar_1.png"/>
+                      </div>
+                      <p>{{follow.nickname}}：&nbsp;<span>@{{follow.respondent}}</span></p>
+                      <p @click="reply(note.id,follow.id,follow.nickname)">回复</p>
+                      <p>{{follow.createTime}}</p>
+                      <p>{{follow.content}}</p>
+                  </li>
+              </ul>
+
+          </li>
+
+      </ul>
+  </div>
+</div>
+
+</body>
+</html>
+<script src="js/note/vue.js"></script>
+<script src="js/note/jquery-3.5.1.js"></script>
+<script src="js/note/commen.js"></script>
+<script src="js/note/note.js"></script>

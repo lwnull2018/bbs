@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.bbs.remark.dao.NoteMapper">
+
+    <resultMap type="com.bbs.remark.pojo.Note" id="noteWithFollows">
+        <!--
+            留言的结果集映射，由于查询结果设计嵌套，字段众多，因此需要为字段定义别名
+            根留言使用note_开头，回复使用follow_开头
+        -->
+        <id property="id" column="note_id"/>
+        <result property="nickname" column="note_nickname"/>
+        <result property="avatar" column="note_avatar"/>
+        <result property="content" column="note_content"/>
+        <result property="createTime" column="note_time"/>
+
+        <collection property="follows" javaType="list" ofType="com.bbs.remark.pojo.Note" columnPrefix="follow_">
+            <id property="id" column="id"/>
+            <result property="nickname" column="nickname"/>
+            <result property="avatar" column="avatar"/>
+            <result property="content" column="content"/>
+            <result property="createTime" column="create_time"/>
+            <result property="respondent" column="respondent"/>
+            <result property="resId" column="res_id"/>
+            <result property="replyPost" column="reply_post"/>
+        </collection>
+    </resultMap>
+
+    <insert id="addNote">
+        insert into
+            note(
+            content,
+            nickname,
+            avatar,
+            create_time,
+            reply_post,
+            res_id
+        )
+            value(
+            #{note.content},
+            #{note.nickname},
+            #{note.avatar},
+            #{note.createTime},
+            #{note.replyPost},
+            #{note.resId}
+            )
+    </insert>
+    <select id="getAll" resultMap="noteWithFollows">
+        select
+            n1.n_id 		as note_id,
+            n1.content 		as note_content,
+            n1.create_time 	as note_time,
+            n1.nickname 	as note_nickname,
+            n1.avatar 	    as note_avatar,
+            n2.n_id 		as follow_id,
+            n2.content 		as follow_content,
+            n2.nickname		as follow_nickname,
+            n2.create_time	as follow_create_time,
+            n2.res_id		as follow_res_id,
+            n2.reply_post	as follow_reply_post,
+            n2.is_delete	as follow_is_delete,
+            n3.nickname  	as follow_respondent,
+            n3.avatar  	    as follow_avatar
+        from
+            note n1
+                LEFT JOIN note n2 on n1.n_id = n2.reply_post
+                LEFT JOIN note n3 on n2.res_id = n3.n_id
+        where
+            n1.is_delete = 0
+          and
+            n1.reply_post = 0
+        order by
+            n1.create_time desc,
+            n2.create_time
+    </select>
+</mapper>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:include="layout :: htmlhead" th:with="title='附件管理'"></head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!--头-->
+    <div th:replace="fragments/head :: header"></div>
+
+    <div class="layui-body" style="margin: 1%">
+
+        <form id="userSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">消息模板ID</label>
+                <div class="layui-input-inline">
+                    <input name="messageTemplateId" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+                <label class="layui-form-label">用户ID</label>
+                <div class="layui-input-inline">
+                    <input name="chatId" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                    <input name="userName" autocomplete="off" class="layui-input" type="text"/>
+                </div>
+                <div class="layui-inline">
+                    <!--                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                    <button class="layui-btn"  lay-submit="" lay-filter="searchSubmit">查询</button>
+                </div>
+            </div>
+        </form>
+
+        <hr class="layui-bg-blue"/>
+<!--        <hr class="layui-bg-black"/>-->
+
+        <div style="display:none;" id="currentUser"><shiro:principal property="id"></shiro:principal></div>
+
+        <table id="historyList" lay-filter="historyTable"></table>
+
+    </div>
+
+    <!--添加或编辑文件-->
+    <div id="setFile" class="layer_self_wrap" style="width:700px;display:none;">
+        <form id="msgForm" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
+            <input id="pageNum" type="hidden" name="pageNum"/>
+            <input id="id" type="hidden" name="id"/>
+            <div class="layui-form-item">
+                <label class="layui-form-label">文件名</label>
+                <div class="layui-input-inline" style="width:500px;">
+                    <div class="layui-input-inline" style="width: 250px;">
+                        <input id="fileName" type="text" name="fileName" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div id="fileDiv" class="layui-form-item">
+                <label class="layui-form-label">上传文件</label>
+                <div class="layui-input-inline">
+                    <button id="fileContent" name="fileContent" type="button" class="layui-btn layui-btn-normal" lay-verify="isUpload">选择文件</button>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 10px;">
+                    <button id="formSubmit" class="layui-btn layui-hide" lay-submit lay-filter="formSubmit" >提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--底部-->
+    <div th:replace="fragments/footer :: footer"></div>
+    <script src="/js/dateUtils.js"></script>
+    <script src="/js/message/sendResponseHistory.js"></script>
+
+    <style>
+        .layui-form-item .layui-input-inline{
+            width: 180px;
+        }
+    </style>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+server:
+  port: 8102
+
+telegram:
+  bot:
+    token: 1263484735:AAFPIXijbtvXiF4qqKa66XUmCA0J7kjm1Ps
+    username: zhangsan2
+
+upload:
+  filePath: /Users/zhang/IdeaProjects/bbs_remark/src/main/resources/upload
+
+spring:
+  application:
+      name: bbs_remark
+  datasource:
+    druid:
+      url: jdbc:mysql://localhost:3306/bbs_remark?useUnicode=yes&characterEncoding=UTF-8&useInformationSchema=true&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+      username: root
+      password: a12341234
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      test-on-borrow: true
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    cache: false
+#    suffix: html
+    prefix: classpath:/templates/
+#    mode: HTML5
+#    encoding: UTF-8
+#      content-type: text/html
+
+mybatis:
+    mapper-locations: classpath:mapper/*.xml
+
+#设置静态资源路径，多个以逗号分隔
+spring.resources.static-locations: classpath:static/,file:static/
